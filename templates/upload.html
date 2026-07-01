@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% if error %}
+
+<div class="alert alert-danger alert-dismissible fade show">
+
+    {{ error }}
+
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+{% endif %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="feature-card">
+
+                <h1 class="text-center mb-3">
+                    Upload Dataset
+                </h1>
+
+                <p class="text-center text-muted mb-4">
+
+                    Upload your CSV dataset to begin the ETL pipeline.
+
+                </p>
+
+                <form method="POST"
+                      enctype="multipart/form-data">
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+
+                            Choose CSV File
+
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            name="file"
+                            accept=".csv"
+                            required>
+
+                    </div>
+
+                    <div class="text-center">
+
+                        <button
+                            class="btn btn-primary btn-lg px-5">
+
+                            Upload Dataset
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <hr class="my-4">
+
+                <h5>What happens after upload?</h5>
+
+                <ul>
+
+                    <li>Extract the dataset</li>
+
+                    <li>Profile the dataset</li>
+
+                    <li>Calculate metadata</li>
+
+                    <li>Detect missing values</li>
+
+                    <li>Detect duplicate rows</li>
+
+                    <li>Generate dashboard statistics</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

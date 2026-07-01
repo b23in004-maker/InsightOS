@@ -1,0 +1,1 @@
+console.log("InsightOS Loaded Successfully");

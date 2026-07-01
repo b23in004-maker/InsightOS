@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Contact Us</h1>
+        <p class="text-muted">
+            We'd love to hear your feedback, suggestions, or project inquiries.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Left Card -->
+        <div class="col-lg-5">
+
+            <div class="feature-card h-100">
+
+                <h3 class="mb-4 text-primary">InsightOS</h3>
+
+                <p>
+                    InsightOS is a Decision Intelligence Platform that empowers
+                    organizations to discover existing data, detect dormant
+                    information, identify missing business data, and evaluate
+                    decision outcomes through intelligent analytics.
+                </p>
+
+                <hr>
+
+                <h5>Project Details</h5>
+
+                <p>
+                    <strong>Developer:</strong><br>
+                    Pratheeka Reddy
+                </p>
+
+                <p>
+                    <strong>Technology Stack:</strong><br>
+                    Flask • Python • Pandas • MySQL • Bootstrap
+                </p>
+
+                <p>
+                    <strong>Version:</strong><br>
+                    InsightOS v1.0
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Right Card -->
+        <div class="col-lg-7">
+
+            <div class="feature-card">
+
+                <h3 class="mb-4 text-primary">
+                    Send a Message
+                </h3>
+
+                <form>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter your name">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            placeholder="Enter your email">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Subject">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Message
+                        </label>
+
+                        <textarea
+                            rows="5"
+                            class="form-control"
+                            placeholder="Write your message..."></textarea>
+
+                    </div>
+
+                    <button class="btn btn-primary px-4">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

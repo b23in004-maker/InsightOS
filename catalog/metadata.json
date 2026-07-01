@@ -1,0 +1,63 @@
+[
+    {
+        "dataset_name": "customers.csv",
+        "rows": 6,
+        "columns": 4,
+        "memory_usage": 0.84,
+        "quality_score": 95.83,
+        "uploaded_at": "2026-06-28 23:18:49"
+    },
+    {
+        "dataset_name": "QVI_purchase_behaviour.csv",
+        "rows": 72637,
+        "columns": 3,
+        "memory_usage": 9234.29,
+        "quality_score": 100.0,
+        "uploaded_at": "2026-06-28 23:33:43"
+    },
+    {
+        "dataset_name": "customers.csv",
+        "rows": 6,
+        "columns": 4,
+        "memory_usage": 0.84,
+        "quality_score": 95.83,
+        "uploaded_at": "2026-06-28 23:34:08"
+    },
+    {
+        "dataset_name": "customers.csv",
+        "rows": 6,
+        "columns": 4,
+        "memory_usage": 0.84,
+        "quality_score": 95.83,
+        "uploaded_at": "2026-06-28 23:46:01"
+    },
+    {
+        "dataset_name": "QVI_purchase_behaviour.csv",
+        "rows": 72637,
+        "columns": 3,
+        "memory_usage": 9234.29,
+        "quality_score": 100.0,
+        "uploaded_at": "2026-06-28 23:52:21"
+    },
+    {
+        "dataset_name": "QVI_purchase_behaviour.csv",
+        "rows": 72637,
+        "columns": 3,
+        "quality_score": 100.0,
+        "uploaded_at": "29-06-2026 00:46"
+    },
+    {
+        "dataset_name": "QVI_purchase_behaviour.csv",
+        "rows": 72637,
+        "columns": 3,
+        "quality_score": 100.0,
+        "uploaded_at": "29-06-2026 14:23"
+    },
+    {
+        "dataset_name": "customers.csv",
+        "rows": 6,
+        "columns": 4,
+        "quality_score": 95.83,
+        "uploaded_at": "01-07-2026 16:19"
+    }
+]

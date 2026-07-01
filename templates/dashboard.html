@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1 class="text-center mb-5">
+        InsightOS Dashboard
+    </h1>
+
+    {% if data %}
+
+    <!-- KPI CARDS -->
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h2>{{ data.rows }}</h2>
+                <p>Total Rows</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h2>{{ data.columns }}</h2>
+                <p>Total Columns</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h2>{{ data.missing_values }}</h2>
+                <p>Missing Values</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h2>{{ data.duplicate_rows }}</h2>
+                <p>Duplicate Rows</p>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="text-end mb-4">
+
+    <a href="{{ url_for('download_report') }}"
+       class="btn btn-success">
+
+        📄 Download Executive Report
+
+    </a>
+
+</div>
+
+    <!-- DATASET INFORMATION -->
+
+    <div class="feature-card">
+
+        <h3>Dataset Information</h3>
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Dataset Name</th>
+                <td>{{ data.dataset_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Memory Usage</th>
+                <td>{{ data.memory_usage }} KB</td>
+            </tr>
+
+            <tr>
+                <th>Quality Score</th>
+                <td>{{ data.quality_score }}%</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <!-- COLUMN INFORMATION -->
+
+    <div class="feature-card">
+
+        <h3>Column Information</h3>
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+                    <th>Column</th>
+                    <th>Data Type</th>
+                    <th>Missing Values</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for column in data.column_names %}
+
+                <tr>
+
+                    <td>{{ column }}</td>
+
+                    <td>{{ data.data_types[column] }}</td>
+
+                    <td>{{ data.missing_per_column[column] }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <!-- DATA DISCOVERY -->
+
+    <div class="feature-card">
+
+        <h3>Data Discovery Engine</h3>
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Column</th>
+                    <th>Classification</th>
+                    <th>Data Type</th>
+                    <th>Unique Values</th>
+                    <th>Missing</th>
+                    <th>Completeness</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for column in data.discovery %}
+
+                <tr>
+
+                    <td>{{ column.column }}</td>
+                    <td>{{ column.classification }}</td>
+                    <td>{{ column.datatype }}</td>
+                    <td>{{ column.unique }}</td>
+                    <td>{{ column.missing }}</td>
+                    <td>{{ column.completeness }}%</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <!-- DORMANT DATA -->
+
+    <div class="feature-card">
+
+        <h3>Dormant Data Detection</h3>
+
+        {% if data.dormant %}
+
+        <table class="table table-bordered">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Column</th>
+                    <th>Reason</th>
+                    <th>Missing %</th>
+                    <th>Unique Values</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for column in data.dormant %}
+
+                <tr>
+
+                    <td>{{ column.column }}</td>
+                    <td>{{ column.reason }}</td>
+                    <td>{{ column.missing_percent }}%</td>
+                    <td>{{ column.unique }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="alert alert-success">
+
+            No dormant columns detected.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <!-- GAP DETECTION -->
+
+    <div class="feature-card">
+
+        <h3>Gap Detection Engine</h3>
+
+        <p>
+
+            <strong>Detected Dataset Type:</strong>
+
+            {{ data.gap.dataset_type }}
+
+        </p>
+
+        {% if data.gap.missing_columns %}
+
+        <table class="table table-bordered">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Missing Attribute</th>
+
+                    <th>Recommendation</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for column in data.gap.missing_columns %}
+
+                <tr>
+
+                    <td>{{ column }}</td>
+
+                    <td>{{ data.gap.recommendations[loop.index0] }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="alert alert-success">
+
+            No business gaps detected.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <!-- DECISION INTELLIGENCE -->
+
+    <div class="feature-card">
+
+        <h3>🧠 InsightOS Advisor</h3>
+
+        {% if data.decision %}
+
+        <div class="alert alert-primary">
+
+            <h5>Overall Dataset Health</h5>
+
+            <h2>{{ data.decision.health }}</h2>
+
+        </div>
+
+        <h5>Recommended Actions</h5>
+
+        <ul class="list-group">
+
+            {% for recommendation in data.decision.recommendations %}
+
+            <li class="list-group-item">
+
+                {{ recommendation }}
+
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% else %}
+
+        <div class="alert alert-warning">
+
+            Decision report not generated.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-warning text-center">
+
+        <h4>No dataset uploaded yet.</h4>
+
+        <p>Please upload a CSV file to begin analysis.</p>
+
+        <a href="{{ url_for('upload') }}" class="btn btn-primary">
+
+            Upload Dataset
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
