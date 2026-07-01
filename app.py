@@ -16,11 +16,15 @@ from config import Config
 from etl import process_dataset
 
 from catalog.catalog import add_dataset, get_catalog
+from database.repository import save_dataset
 from reports.generator import generate_pdf
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Required for flash messages
+app.secret_key = app.config.get("SECRET_KEY", "insightos_secret_key")
 
 # Stores the latest uploaded dataset
 dashboard_data = None
@@ -84,7 +88,6 @@ def upload():
 
     if request.method == "POST":
 
-        # No file selected
         if "file" not in request.files:
             return render_template(
                 "upload.html",
@@ -93,14 +96,12 @@ def upload():
 
         file = request.files["file"]
 
-        # Empty filename
         if file.filename == "":
             return render_template(
                 "upload.html",
                 error="Please select a CSV file."
             )
 
-        # Invalid file type
         if not allowed_file(file.filename):
             return render_template(
                 "upload.html",
@@ -111,6 +112,11 @@ def upload():
 
             filename = secure_filename(file.filename)
 
+            os.makedirs(
+                app.config["UPLOAD_FOLDER"],
+                exist_ok=True
+            )
+
             filepath = os.path.join(
                 app.config["UPLOAD_FOLDER"],
                 filename
@@ -118,8 +124,13 @@ def upload():
 
             file.save(filepath)
 
+            # Process Dataset
             dashboard_data = process_dataset(filepath)
 
+            # Save to SQLite
+            save_dataset(dashboard_data)
+
+            # Save to Metadata Catalog
             add_dataset(dashboard_data)
 
             flash(
@@ -143,11 +154,11 @@ def upload():
                 error="The uploaded CSV file is corrupted or has an invalid format."
             )
 
-        except Exception:
+        except Exception as e:
 
             return render_template(
                 "upload.html",
-                error="An unexpected error occurred while processing the dataset."
+                error=f"Unexpected Error: {str(e)}"
             )
 
     return render_template("upload.html")
@@ -194,17 +205,19 @@ def download_report():
 
     if dashboard_data is None:
 
-        return render_template(
-            "dashboard.html",
-            data=None,
-            error="Please upload a dataset before downloading the report."
+        flash(
+            "Please upload a dataset before downloading the report.",
+            "warning"
         )
+
+        return redirect(url_for("upload"))
 
     pdf = generate_pdf(dashboard_data)
 
     return send_file(
         pdf,
-        as_attachment=True
+        as_attachment=True,
+        download_name="InsightOS_Report.pdf"
     )
 
 
@@ -215,17 +228,13 @@ def download_report():
 @app.errorhandler(404)
 def page_not_found(error):
 
-    return render_template(
-        "404.html"
-    ), 404
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(error):
 
-    return render_template(
-        "500.html"
-    ), 500
+    return render_template("500.html"), 500
 
 
 # ============================================
@@ -234,7 +243,6 @@ def internal_server_error(error):
 
 if __name__ == "__main__":
 
-    # Automatically create uploads folder
     os.makedirs(
         app.config["UPLOAD_FOLDER"],
         exist_ok=True

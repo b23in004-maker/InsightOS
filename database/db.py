@@ -1,16 +1,7 @@
-import mysql.connector
+import sqlite3
+
+DATABASE = "insightos.db"
 
 
 def get_connection():
-
-    return mysql.connector.connect(
-
-        host="localhost",
-
-        user="root",
-
-        password="",
-
-        database="insightos"
-
-    )
+    return sqlite3.connect(DATABASE)

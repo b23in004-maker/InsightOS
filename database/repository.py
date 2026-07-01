@@ -1,54 +1,53 @@
-from database.db import get_connection
+import sqlite3
+
+DATABASE = "insightos.db"
 
 
 def save_dataset(dataset):
 
-    connection = get_connection()
+    connection = sqlite3.connect(DATABASE)
 
     cursor = connection.cursor()
 
-    sql = """
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS datasets (
 
-    INSERT INTO datasets(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-        dataset_name,
+            dataset_name TEXT,
+            rows_count INTEGER,
+            columns_count INTEGER,
+            quality_score REAL,
+            missing_values INTEGER,
+            duplicate_rows INTEGER
 
-        rows_count,
+        )
+    """)
 
-        columns_count,
+    cursor.execute("""
+        INSERT INTO datasets (
 
-        quality_score,
+            dataset_name,
+            rows_count,
+            columns_count,
+            quality_score,
+            missing_values,
+            duplicate_rows
 
-        missing_values,
+        )
 
-        duplicate_rows
-
-    )
-
-    VALUES(%s,%s,%s,%s,%s,%s)
-
-    """
-
-    values = (
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
 
         dataset["dataset_name"],
-
         dataset["rows"],
-
         dataset["columns"],
-
         dataset["quality_score"],
-
         dataset["missing_values"],
-
         dataset["duplicate_rows"]
 
-    )
-
-    cursor.execute(sql, values)
+    ))
 
     connection.commit()
-
-    cursor.close()
 
     connection.close()
